@@ -1,11 +1,12 @@
 import express from "express";
-import { getDocument } from "./controllers/documentController.js";
-import { createDocumentSchema } from "./validators/documentValidator.js";
 // Middleware imports
 import requestLogger from "./middleware/requestLogger.js";
 import requestTimer from "./middleware/requestTimer.js";
 import errorHandler from "./middleware/errorHandler.js";
 import validate from "./middleware/validate.js";
+
+// Routes
+import authRoutes from "./routes/authRoutes.js";
 
 // Utility imports
 import AppError from "./utils/AppError.js";
@@ -17,6 +18,7 @@ const app = express();
 app.use(express.json());
 app.use(requestLogger);
 app.use(requestTimer);
+app.use("/api/auth", authRoutes);
 
 // 2. Health check route
 app.get("/health", (req, res) => {
@@ -25,15 +27,8 @@ app.get("/health", (req, res) => {
 		message: "Legal SaaS API is running",
 	});
 });
-app.post("/api/documents", validate(createDocumentSchema), (req, res) => {
-	return res.status(201).json({
-		success: true,
-		message: "Document created",
-		data: req.validatedBody,
-	});
-});
+
 // 3. Test document route
-app.get("/api/documents/:id", getDocument);
 app.get("/test", async (req, res) => {
 	const result = await someDatabaseOperation();
 
