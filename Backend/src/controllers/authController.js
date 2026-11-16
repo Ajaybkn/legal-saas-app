@@ -41,5 +41,14 @@ const getMe = async (req, res) => {
 		},
 	});
 };
+const getAllUsers = async (req, res) => {
+	const users = await User.find().select("name email role isActive createdAt");
 
-export { register, login, getMe };
+	return res.status(200).json({
+		success: true,
+		message: "Users fetched successfully",
+		results: users.length,
+		data: users,
+	});
+};
+export { register, login, getMe, getAllUsers };

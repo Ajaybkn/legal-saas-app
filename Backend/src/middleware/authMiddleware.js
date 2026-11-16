@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import AppError from "../utils/AppError.js";
-
-const protect = (req, res, next) => {
+import User from "../models/userModel.js";
+const protect = async (req, res, next) => {
 	try {
 		// 1. Read Authorization header
 		const authHeader = req.headers.authorization;
@@ -16,11 +16,16 @@ const protect = (req, res, next) => {
 
 		// 4. Verify token
 		const decoded = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ["HS256"] });
-
+		const user = await User.findById(decoded.sub);
+		if (!user || !user.isActive) {
+			return next(new AppError("User account not found or inactive", 401));
+		}
 		// 5. Attach authenticated identity to request
 		req.user = {
-			id: decoded.sub,
-			role: decoded.role,
+			id: user._id.toString(),
+			name: user.name,
+			email: user.email,
+			role: user.role,
 		};
 
 		// 6. Continue to next handler
