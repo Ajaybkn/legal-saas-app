@@ -1,5 +1,4 @@
 import "dotenv/config";
-console.log("MongoDB URI loaded:", Boolean(process.env.MONGODB_URI));
 import app from "./app.js";
 import connectDB from "./config/database.js";
 

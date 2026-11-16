@@ -28,12 +28,6 @@ app.get("/health", (req, res) => {
 	});
 });
 
-// 3. Test document route
-app.get("/test", async (req, res) => {
-	const result = await someDatabaseOperation();
-
-	res.json(result);
-});
 // 4. Handle undefined routes
 app.use((req, res, next) => {
 	return next(new AppError(`Route not found: ${req.originalUrl}`, 404));

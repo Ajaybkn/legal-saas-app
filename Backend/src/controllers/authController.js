@@ -1,4 +1,4 @@
-import { registerUser } from "../services/authService.js";
+import { registerUser, loginUser } from "../services/authService.js";
 
 const register = async (req, res) => {
 	const user = await registerUser(req.validatedBody);
@@ -10,4 +10,14 @@ const register = async (req, res) => {
 	});
 };
 
-export { register };
+const login = async (req, res) => {
+	const result = await loginUser(req.validatedBody);
+
+	return res.status(200).json({
+		success: true,
+		message: "Login successful",
+		data: result,
+	});
+};
+
+export { register, login };
