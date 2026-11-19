@@ -1,25 +1,28 @@
 import Document from "../models/documentModel.js";
 import AppError from "../utils/AppError.js";
 
-const createDocument = async (data, userId) => {
+const createDocument = async (data, user) => {
 	const document = await Document.create({
 		...data,
-		ownerId: userId,
+		ownerId: user.id,
+		organizationId: user.organizationId,
 	});
 
 	return document;
 };
 
-const getMyDocuments = async (userId) => {
+const getMyDocuments = async (user) => {
 	return Document.find({
-		ownerId: userId,
+		organizationId: user.organizationId,
+		ownerId: user.id,
 	}).sort({ createdAt: -1 });
 };
 
-const getDocumentById = async (documentId, userId) => {
+const getDocumentById = async (documentId, user) => {
 	const document = await Document.findOne({
 		_id: documentId,
-		ownerId: userId,
+		organizationId: user.organizationId,
+		ownerId: user.id,
 	});
 
 	if (!document) {

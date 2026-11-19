@@ -29,6 +29,11 @@ const documentSchema = new mongoose.Schema(
 			ref: "User",
 			required: true,
 		},
+		organizationId: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Organization",
+			required: true,
+		},
 	},
 	{
 		timestamps: true,
