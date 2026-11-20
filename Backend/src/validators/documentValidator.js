@@ -11,3 +11,10 @@ export const createDocumentSchema = z.object({
 
 	content: z.string().optional().default(""),
 });
+const updateDocumentSchema = z
+	.object({
+		title: z.string().min(3).optional(),
+		description: z.string().optional(),
+		status: z.enum(["draft", "published", "archived"]).optional(),
+	})
+	.strict();
